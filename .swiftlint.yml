@@ -1,0 +1,176 @@
+disabled_rules:
+  # Disabled due to Xcode formatting inconsistencies
+  - closure_end_indentation
+  - literal_expression_end_indentation
+  - multiline_arguments
+  - multiline_arguments_brackets
+  - trailing_whitespace
+  - vertical_whitespace_between_cases
+
+  # Style preferences
+  - attributes
+  - discouraged_object_literal
+  - discouraged_optional_collection
+  - explicit_enum_raw_value
+  - explicit_type_interface
+  - extension_access_modifier
+  - function_parameter_count
+  - identifier_name
+  - implicit_return
+  - large_tuple
+  - multiple_closures_with_trailing_closure
+  - nesting
+  - number_separator
+  - object_literal
+  - prefixed_toplevel_constant
+  - switch_case_on_newline
+  - trailing_comma
+  - type_body_length
+  - type_name
+  - unneeded_parentheses_in_closure_argument
+
+  # Test framework-specific rules not in use
+  - nimble_operator
+  - quick_discouraged_call
+  - quick_discouraged_focused_test
+  - quick_discouraged_pending_test
+
+  # File structuring
+  - file_types_order
+
+  # API-specific
+  - nslocalizedstring_require_bundle
+  - reduce_into
+
+opt_in_rules:
+  - array_init
+  - attributes
+  - block_based_kvo
+  - class_delegate_protocol
+  - closing_brace
+  - closure_parameter_position
+  - closure_spacing
+  - colon
+  - comma
+  - compiler_protocol_init
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - control_statement
+  - discarded_notification_center_observer
+  - discouraged_direct_init
+  - discouraged_optional_boolean
+  - duplicate_imports
+  - dynamic_inline
+  - empty_collection_literal
+  - empty_count
+  - empty_enum_arguments
+  - empty_parameters
+  - empty_parentheses_with_trailing_closure
+  - empty_string
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - first_where
+  - flatmap_over_map_reduce
+  - for_where
+  - force_cast
+  - force_try
+  - force_unwrapping
+  - implicit_getter
+  - implicitly_unwrapped_optional
+  - is_disjoint
+  - joined_default_parameter
+  - last_where
+  - leading_whitespace
+  - legacy_cggeometry_functions
+  - legacy_constant
+  - legacy_constructor
+  - legacy_hashing
+  - legacy_nsgeometry_functions
+  - lower_acl_than_parent
+  - mark
+  - multiline_parameters
+  - no_space_in_method_call
+  - notification_center_detachment
+  - opening_brace
+  - operator_usage_whitespace
+  - operator_whitespace
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  - private_action
+  - private_outlet
+  - private_over_fileprivate
+  - private_unit_test
+  - prohibited_super_call
+  - protocol_property_accessors_order
+  - redundant_discardable_let
+  - redundant_nil_coalescing
+  - redundant_objc_attribute
+  - redundant_optional_initialization
+  - redundant_void_return
+  - required_enum_case
+  - return_arrow_whitespace
+  - shorthand_operator
+  - single_test_class
+  - sorted_first_last
+  - statement_position
+  - superfluous_disable_command
+  - switch_case_alignment
+  - syntactic_sugar
+  - trailing_newline
+  - trailing_semicolon
+  - unneeded_break_in_switch
+  - unused_control_flow_label
+  - unused_closure_parameter
+  - unused_enumerated
+  - unused_optional_binding
+  - unused_setter_value
+  - valid_ibinspectable
+  - vertical_parameter_alignment
+  - vertical_parameter_alignment_on_call
+  - vertical_whitespace
+  - vertical_whitespace_closing_braces
+  - void_return
+  - weak_delegate
+  - xctfail_message
+  - yoda_condition
+  - reduce_boolean
+  - nsobject_prefer_isequal
+  - unowned_variable_capture
+  - duplicate_enum_cases
+  - legacy_multiple
+
+included:
+  - ./**/Sources/*
+  - ./**/Tests/*
+
+
+# Configurable rule overrides
+line_length:
+  ignores_comments: true
+
+function_body_length:
+  warning: 80
+  error: 250
+
+force_cast:
+  severity: warning
+
+force_try:
+  severity: warning
+
+empty_count:
+  only_after_dot: true
+
+opening_brace:
+  ignore_multiline_type_headers: true
+  ignore_multiline_statement_conditions: true
+  ignore_multiline_function_signatures: true
+
+
+file_length:
+  warning: 500
+  error: 800

@@ -1,0 +1,6 @@
+--header "//\n{file}\nCopyright © {year} Apps with love AG. All rights reserved.\n"
+--swiftversion 6.1
+--stripunusedargs closure-only
+--maxwidth 120
+--wraparguments before-first
+--closingparen "balanced"
