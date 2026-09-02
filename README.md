@@ -30,6 +30,12 @@ struct CounterViewTests {
 Because it walks the accessibility tree, a view that is untestable is also a view VoiceOver users
 cannot use. The two problems get fixed together.
 
+<p align="center">
+  <img src="Docs/demo.gif" width="300" alt="A test tapping Increment twice, flipping a toggle, opening a sheet, typing a name and tapping Save, slowed down on the simulator." />
+</p>
+
+<p align="center"><sub>A hosted test driving a form, slowed down with <code>SEMANTICS_DEMO_PAUSE</code>-style one-second pauses so you can watch it.</sub></p>
+
 ## Requirements
 
 - iOS 17+ (simulator or device). UIKit only, no macOS.
