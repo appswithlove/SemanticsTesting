@@ -101,6 +101,9 @@ struct SemanticsTestHostApp: App {
 }
 ```
 
+Give the host a launch screen (`UILaunchScreen` as an empty dictionary in its `Info.plist`).
+Without one iOS runs it letterboxed at 320×480 points on every device, and so do your tests.
+
 If your app ships custom fonts, register them in the host's `Info.plist` under `UIAppFonts` too.
 Without them the host falls back to the system face, and a view that wraps or truncates in the
 app measures differently in the test.
@@ -121,7 +124,7 @@ Queries return `SemanticsNode` values: `label`, `value`, `identifier`, `traits`,
 | Wait | `expect(_:)`, `expect(id:)`, `expect(containing:)`, `expectGone(_:)`, `wait(where:)` | `expectAsync`, `expectGoneAsync`, `waitAsync` |
 | Act | `tap(_:)`, `type(_:into:)`, `forceActivate(_:)`, `node.activate()`, `node.performCustomAction(named:)`, `node.increment()` / `decrement()` | `tapAsync(_:)` |
 | Time | `pump(_:)` | `settle(_:)` |
-| Debug | `dump()`, `SemanticsWalker.dump(_:)` | |
+| Debug | `dump()`, `SemanticsWalker.dump(_:)`, `snapshot(_:in:)` | |
 
 Waits scroll every scroll view down one step after a third of the timeout, so lazy rows below
 the fold materialize the way they would for a user.
@@ -129,6 +132,10 @@ the fold materialize the way they would for a user.
 `tap` resolves a label first inside the frontmost presented sheet, then in the rest of the tree,
 prefers buttons, and refuses disabled controls. `forceActivate` skips the enabled check, for
 negative tests only.
+
+`snapshot("name")` writes the hosted window, plus menu and popover windows, as a PNG into
+`SNAPSHOT_DIR` (`TEST_RUNNER_SNAPSHOT_DIR` via xcodebuild) or a temp folder. It is for looking
+at a view, e.g. in a PR review. It compares nothing and does not include the system status bar.
 
 Set `SEMANTICS_DEMO_PAUSE=1` (seconds; via `TEST_RUNNER_SEMANTICS_DEMO_PAUSE` when launching
 through xcodebuild) to slow interactions down enough to watch them on the simulator.
