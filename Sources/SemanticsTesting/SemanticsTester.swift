@@ -132,6 +132,17 @@ public final class SemanticsTester {
         }
     }
 
+    /// Waits for an enabled element, letting queued async work run between checks.
+    ///
+    /// Use it to assert a control became enabled after an edit: the synchronous `expect(_:)` cannot
+    /// see state that arrives as async main-actor work, such as iOS 27 toolbar refreshes.
+    @discardableResult
+    public func expectEnabledAsync(_ label: String, timeout: TimeInterval = 3) async throws -> SemanticsNode {
+        try await waitAsync(timeout: timeout, description: "enabled node with label '\(label)'") {
+            $0.label == label && $0.isEnabled
+        }
+    }
+
     /// Waits until no element with this label remains, letting queued async work run.
     public func expectGoneAsync(_ label: String, timeout: TimeInterval = 3) async throws {
         let deadline = Date().addingTimeInterval(timeout)
