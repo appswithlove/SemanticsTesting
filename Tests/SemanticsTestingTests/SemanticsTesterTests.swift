@@ -45,6 +45,22 @@ private struct AsyncCounterView: View {
     }
 }
 
+/// "Save" is enabled by main-actor work queued from "Edit", the way iOS 27 delivers toolbar
+/// refreshes: nothing a synchronous `pump()` drains.
+private struct DeferredEnableView: View {
+    @State private var enabled = false
+    @State private var saved = 0
+
+    var body: some View {
+        VStack {
+            Text("Saved: \(saved)")
+            Button("Edit") { Task { enabled = true } }
+            Button("Save") { saved += 1 }
+                .disabled(!enabled)
+        }
+    }
+}
+
 // MARK: - Tests
 
 /// Host-less: the package tests run without a `UIApplication`, so presentation (sheets, menus,
@@ -123,6 +139,36 @@ struct SemanticsTesterTests {
         try await tester.tapAsync("Load")
         try await tester.expectAsync("Async count: 1")
         try await tester.expectGoneAsync("Async count: 0")
+    }
+
+    @Test func tapAsyncWaitsForAControlEnabledByAsyncWork() async throws {
+        let tester = await SemanticsTester.make { DeferredEnableView() }
+        defer { tester.tearDown() }
+
+        try tester.tap("Edit")
+        try await tester.tapAsync("Save")
+
+        try await tester.expectAsync("Saved: 1")
+    }
+
+    @Test func expectEnabledAsyncWaitsForAsyncEnablement() async throws {
+        let tester = await SemanticsTester.make { DeferredEnableView() }
+        defer { tester.tearDown() }
+
+        #expect(try tester.expect("Save").isEnabled == false)
+        try tester.tap("Edit")
+
+        try await tester.expectEnabledAsync("Save")
+    }
+
+    @Test func tapAsyncStillRefusesAControlThatStaysDisabled() async throws {
+        let tester = await SemanticsTester.make { CounterView(enabled: false) }
+        defer { tester.tearDown() }
+
+        await #expect(throws: SemanticsError.self) {
+            try await tester.tapAsync("Increment", timeout: 0.3)
+        }
+        try await tester.expectAsync("Count: 0")
     }
 
     @Test func waitsScrollListsToRevealRowsBelowTheFold() throws {

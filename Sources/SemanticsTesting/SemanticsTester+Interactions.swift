@@ -209,8 +209,21 @@ extension SemanticsTester {
     /// `Button { Task { await … } }` is the common shape in this app: the synchronous action
     /// fires immediately, but its Task makes no progress while `pump()` blocks the MainActor.
     /// This awaits afterwards so the effect has actually landed when the call returns.
+    ///
+    /// A control that cannot be activated yet (still disabled) is retried until `timeout`, letting
+    /// async work run in between. Since iOS 27 SwiftUI refreshes toolbar items that way, so a bar
+    /// button enabled by an edit stays disabled until the test suspends.
     public func tapAsync(_ label: String, timeout: TimeInterval = 3) async throws {
-        try tap(label, timeout: timeout)
+        let deadline = Date().addingTimeInterval(timeout)
+        while true {
+            do {
+                try tap(label, timeout: max(deadline.timeIntervalSinceNow, 0.05))
+                break
+            } catch {
+                guard Date() < deadline else { throw error }
+                await settle(0.02)
+            }
+        }
         await settle()
     }
 

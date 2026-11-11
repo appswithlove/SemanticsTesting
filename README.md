@@ -121,7 +121,7 @@ Queries return `SemanticsNode` values: `label`, `value`, `identifier`, `traits`,
 |---|---|---|
 | Create | `SemanticsTester { view }`, `SemanticsTester(hosting:)` | `SemanticsTester.make { view }` |
 | Find now | `nodes`, `node(_:)`, `node(id:)`, `node(value:)`, `node(containing:)` | |
-| Wait | `expect(_:)`, `expect(id:)`, `expect(containing:)`, `expectGone(_:)`, `wait(where:)` | `expectAsync`, `expectGoneAsync`, `waitAsync` |
+| Wait | `expect(_:)`, `expect(id:)`, `expect(containing:)`, `expectGone(_:)`, `wait(where:)` | `expectAsync`, `expectEnabledAsync`, `expectGoneAsync`, `waitAsync` |
 | Act | `tap(_:)`, `type(_:into:)`, `forceActivate(_:)`, `node.activate()`, `node.performCustomAction(named:)`, `node.increment()` / `decrement()` | `tapAsync(_:)` |
 | Time | `pump(_:)` | `settle(_:)` |
 | Debug | `dump()`, `SemanticsWalker.dump(_:)`, `snapshot(_:in:)` | |
@@ -132,6 +132,11 @@ the fold materialize the way they would for a user.
 `tap` resolves a label first inside the frontmost presented sheet, then in the rest of the tree,
 prefers buttons, and refuses disabled controls. `forceActivate` skips the enabled check, for
 negative tests only.
+
+Since iOS 27 SwiftUI refreshes toolbar items as async main-actor work, which the synchronous API
+never drains: after an edit, a bar button stays disabled until the test suspends. Use
+`expectEnabledAsync` to assert it became enabled. `tapAsync` retries a disabled control until its
+timeout, so it reaches the button once the refresh lands.
 
 `snapshot("name")` writes the hosted window, plus menu and popover windows, as a PNG into
 `SNAPSHOT_DIR` (`TEST_RUNNER_SNAPSHOT_DIR` via xcodebuild) or a temp folder. It is for looking
